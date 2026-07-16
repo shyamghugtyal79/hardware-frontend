@@ -401,3 +401,48 @@ window.addEventListener('afterprint', () => {
     document.title = window.originalDocumentTitle;
   }
 });
+
+// Delete selected bill and revert all stock/ledger details
+window.deleteActiveBill = async function() {
+  if (!activeBill) return;
+
+  const confirmDelete = confirm(`Are you sure you want to permanently delete Bill "${activeBill.billNumber}"? This will delete the invoice, restore all product stock levels, and remove any associated customer debt logs.`);
+  if (!confirmDelete) return;
+
+  const btnDelete = document.getElementById('btn-delete-bill');
+  const originalText = btnDelete ? btnDelete.innerHTML : 'Delete Bill';
+  if (btnDelete) {
+    btnDelete.disabled = true;
+    btnDelete.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Deleting...';
+  }
+
+  try {
+    const res = await fetch(`/api/bills/${activeBill._id}`, {
+      method: 'DELETE'
+    });
+
+    const result = await res.json();
+    if (!res.ok) {
+      alert(`Delete failed: ${result.message}`);
+      return;
+    }
+
+    alert('Bill deleted successfully. Inventory stock counts and ledger records have been reverted.');
+
+    // Clear active detail selection and view placeholder
+    activeBill = null;
+    document.getElementById('bill-details-active').style.display = 'none';
+    document.getElementById('bill-details-empty').style.display = 'block';
+
+    // Reload list
+    await loadBillsLedger();
+  } catch (err) {
+    console.error('Error deleting bill:', err);
+    alert('Server error occurred during deletion.');
+  } finally {
+    if (btnDelete) {
+      btnDelete.disabled = false;
+      btnDelete.innerHTML = originalText;
+    }
+  }
+};

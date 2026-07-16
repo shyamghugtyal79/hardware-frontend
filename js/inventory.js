@@ -42,7 +42,16 @@ async function loadInventoryTable() {
   }
 
   try {
-    inventoryTableTbody.innerHTML = '<tr><td colspan="10" class="text-center">Loading inventory database...</td></tr>';
+    inventoryTableTbody.innerHTML = `
+      <tr>
+        <td colspan="10" class="text-center" style="padding: 40px 0;">
+          <div class="spinner-container" style="padding: 0;">
+            <div class="spinner"></div>
+            <div style="margin-top: 8px; font-size: 0.9rem; color: var(--text-secondary);">Loading inventory database... / डेटा लोड हो रहा है...</div>
+          </div>
+        </td>
+      </tr>
+    `;
     
     const res = await fetch(url);
     inventoryProducts = await res.json();
@@ -319,6 +328,13 @@ productForm.addEventListener('submit', async (e) => {
   const url = isEdit ? `/api/products/${id}` : '/api/products';
   const method = isEdit ? 'PUT' : 'POST';
 
+  const submitBtn = productForm.querySelector('button[type="submit"]');
+  const originalBtnHtml = submitBtn ? submitBtn.innerHTML : 'Save Product';
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving... / सहेज रहा है...';
+  }
+
   try {
     const res = await fetch(url, {
       method,
@@ -340,6 +356,11 @@ productForm.addEventListener('submit', async (e) => {
   } catch (err) {
     console.error('Error saving product:', err);
     alert('Server error occurred while saving.');
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnHtml;
+    }
   }
 });
 

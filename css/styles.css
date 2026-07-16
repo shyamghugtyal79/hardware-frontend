@@ -1511,7 +1511,8 @@ a {
   width: 90%;
   max-width: 600px;
   animation: modalSlide 0.25s ease;
-  overflow: hidden;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal-content.modal-sm { max-width: 400px; }
@@ -1859,6 +1860,32 @@ a {
   .card {
     padding: 16px !important;
   }
+}
+
+/* Dynamic Loader Spinner */
+.spinner {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(var(--accent-rgb, 245, 158, 11), 0.2);
+  border-radius: 50%;
+  border-top-color: var(--accent);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  gap: 12px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
 }
 
 /* ----------------------------------------------------

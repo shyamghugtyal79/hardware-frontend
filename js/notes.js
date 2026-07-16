@@ -39,6 +39,12 @@ async function loadNotesAndLedgers() {
 // 1. Fetch & Render Standard Notes
 async function loadStandardNotes() {
   try {
+    notesListContainer.innerHTML = `
+      <div class="spinner-container" style="padding: 30px 0; grid-column: 1 / -1;">
+        <div class="spinner"></div>
+        <div style="margin-top: 8px; font-size: 0.85rem;">Loading notes... / नोट लोड हो रहे हैं...</div>
+      </div>
+    `;
     const res = await fetch('/api/notes?type=note');
     notesList = await res.json();
 
@@ -79,6 +85,12 @@ async function loadLedgerLogs() {
   }
 
   try {
+    ledgerListContainer.innerHTML = `
+      <div class="spinner-container" style="padding: 30px 0;">
+        <div class="spinner"></div>
+        <div style="margin-top: 8px; font-size: 0.85rem;">Loading ledger... / खाता लोड हो रहा है...</div>
+      </div>
+    `;
     const res = await fetch(url);
     ledgerList = await res.json();
 

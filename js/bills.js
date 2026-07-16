@@ -71,7 +71,14 @@ async function loadBillsLedger(filterStatus = null) {
   }
 
   try {
-    billsLedgerList.innerHTML = '<li class="loading-item">Loading invoices...</li>';
+    billsLedgerList.innerHTML = `
+      <li class="loading-item" style="cursor: default; text-align: center; padding: 40px 0;">
+        <div class="spinner-container" style="padding: 0;">
+          <div class="spinner"></div>
+          <div style="margin-top: 8px; font-size: 0.85rem; color: var(--text-secondary);">Loading invoices... / बिल लोड हो रहे हैं...</div>
+        </div>
+      </li>
+    `;
     
     const res = await fetch(url);
     ledgerBills = await res.json();

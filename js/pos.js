@@ -545,6 +545,10 @@ posCheckoutBtn.addEventListener('click', async () => {
     notes
   };
 
+  const originalBtnHtml = posCheckoutBtn.innerHTML;
+  posCheckoutBtn.disabled = true;
+  posCheckoutBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Checking out... / चेकआउट हो रहा है...';
+
   try {
     const url = editingBillId ? `/api/bills/${editingBillId}` : '/api/bills';
     const method = editingBillId ? 'PUT' : 'POST';
@@ -593,6 +597,9 @@ posCheckoutBtn.addEventListener('click', async () => {
   } catch (err) {
     console.error('Error checking out:', err);
     alert('Server error occurred during checkout.');
+  } finally {
+    posCheckoutBtn.disabled = false;
+    posCheckoutBtn.innerHTML = originalBtnHtml;
   }
 });
 
